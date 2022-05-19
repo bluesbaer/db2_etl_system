@@ -1,0 +1,112 @@
+ETL - Extract, Transform, Load
+
+STEPS:
+1. Extract
+    Einlesen der Daten von DB2, CSV, JSON, XML, FIX
+2. Preformat
+    Forformatieren der Daten in ein einheitliches Format
+    Formatstrings für den INPUT
+        src_format(): Feldnamen und Feldlängen (Feldlängen nur bei Fixed-Length)
+        src_type(): Feldnamen und Datentyp
+    Formatstring für den OUTPUT
+        trg_format(): Feldnamen
+3. Filter
+    Eliminieren von Datensätzen welche nicht benötigt werden
+    Kriterien:
+        Feld {>, >=, ==, <=, <, !=} Wert
+        Feld Between Start and End [Start <= Feld <= End]
+        Feld Like Pattern
+    Verknüpfungen:
+        AND
+        OR
+4. Merge
+    Verknüpfen mit anderen Daten
+        data=extract, data_1=extract_1
+        data=preformat, data_1=preformat_1
+        data=filter, data_1=filter_1
+        data=merge(data, data_1)
+        ODER
+        data_1 = []
+        data = merge(data, data_1, join_condition)
+5. Cleansing
+    Beheben von Rechtschreibfehlern
+6. Transform
+    Standardisieren von Werten. 
+    Mapping von Werten.
+7. Delta
+    Aufsplitten der Daten in:
+        INSERT: Neue Daten
+        UPDATE: Ändern von Daten
+        DELETE: Löschen von Daten
+8. Build
+    Aufbereiten der Daten für die Übernahme in die Datenbank
+9. Load
+    Laden der Daten aus den jeweiligen Bulks in die Datenbank
+
+PROZESS:
+Ein PROZESS beinhaltet die STEPS zur Verarbeitung einer Datenlieferung.
+Ein PROZESS muss nicht alle STEPS beinhalten und die STEPS müssen
+nicht unbedingt in dieser Reihenfolge stattfinden. 
+Ausserdem können in einem PROZESS gewisse STEPS mehrfach vorkommen.
+
+WORKFLOW:
+Ein WORKFLOW besteht aus einem bis mehreren PROZESSEN
+
+
+TESTDATA:
+Personal-data
+id, name, surename, age, department-id
+
+-- Database ---------------------
+drop table ssrc.t_source;
+create table ssrc.t_source (
+    id integer,
+    name varchar(10),
+    surename varchar(10),
+    age integer,
+    department_id integer,
+    since date
+);
+
+INSERT INTO ssrc.t_source(id,name,surename,age,department_id,since) VALUES (10, 'Fritz',     'Fratz',   40, 2, '1980-05-01');
+INSERT INTO ssrc.t_source(id,name,surename,age,department_id,since) VALUES (15, 'Franz',     'Hallwax', 42, 1, '1992-03-01');
+INSERT INTO ssrc.t_source(id,name,surename,age,department_id,since) VALUES (20, 'Friedrich', 'Gross',   31, 3, '1998-02-01');
+INSERT INTO ssrc.t_source(id,name,surename,age,department_id,since) VALUES (22, 'Frida',     'Kohl',    28, 1, '2010-06-01');
+-- CSV --------------------------
+ID;PRENAME;POSTNAME;AGE;DEPT_ID,SINCE
+24;Hannelore;Putz;45;3;1991-08-01
+30;Heidi;Grün;20;3;2020-09-01
+31;Gustav;Gans;38;2;2000-03-01
+37;Georg;Klein;41;1;1996-10-01
+-- FIXED LENGTH -----------------
+.2.........0.........0..31........
+39Karl      Hauser     36219991101
+40Anna      Petz       29320150901
+46Doris     Turner     35119961001
+-- JSON -------------------------
+{"personal":[
+    {"id":47,"vorname":"Peter","nachname":"Wolf","alter":48,"abteilung":2,"datum":"1997-08-01"},
+    {"id":49,"vorname":"Martina","nachname":"Weiss","alter":44,"abteilung":1,"datum":"1999-09-01"}
+    ]
+}
+
+# mapping
+map = [
+    [[10,11,12,13,14,15,16,17,18,19],100],
+    [[20,21,22,23,24,25,26,27,28,29],200],
+    [[30,31,32,33,34,35,36,37,38,39],300],
+    [[40,41,42,43,44,45,46,47,48,49],400]
+]
+
+
+Department-data
+id, department-name, manager
+department = [
+    {'id':1, 'department-name':'Human Resource', 'manager':'Turner Doris'},
+    {'id':2, 'department-name':'IT', 'manager':'Gans Gustav'},
+    {'id':3, 'department-name':'SALES', 'manager':'Gross Friedrich'},
+]
+
+External-data
+name, surename, adress
+

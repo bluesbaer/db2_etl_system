@@ -1,0 +1,5 @@
+{"personal":[
+    {"id":47,"vorname":"Peter","nachname":"Wolf","alter":48,"abteilung":2,"datum":"1997-08-01"},
+    {"id":49,"vorname":"Martina","nachname":"Weiss","alter":44,"abteilung":1,"datum":"1999-09-01"}
+    ]
+}
