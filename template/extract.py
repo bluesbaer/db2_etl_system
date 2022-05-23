@@ -1,6 +1,6 @@
 #!/dev/usr python
 
-from db2_etl_system.tools import etl_db, etl_csv, etl_json, etl_xml, etl_fix
+from tools import etl_db, etl_csv, etl_json, etl_xml, etl_fix
 # import tools
 def run():
     """ Define source for extract """

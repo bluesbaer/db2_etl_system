@@ -10,7 +10,6 @@ class Cleansing():
     def load_map(self, **kwargs):
         self.map_intern = kwargs
 
-
     def cleanup(self, data, rules):
         out_data:list = []
         for row in data:
@@ -24,6 +23,8 @@ class Cleansing():
                     row = self.map_data(row, fld, map)
                 elif rule in ['DATE']:
                     row = self.clear_date(row,fld)
+                elif rule in ['IF_THEN']:
+                    row = self.if_then(row, fld, map)
             out_data.append(row)
         return out_data
 
@@ -100,4 +101,15 @@ class Cleansing():
         elif int(row[fld][:4]) %4 != 0 and int(row[fld][4:6]) in [2] and int(row[fld][6:]) >= 1 and int(row[fld][6:]) <=28:
             flag = True
         return flag
-
+    
+    def if_then(self, row, fld, map):
+        for line in self.map_intern[map]:
+            chk = line[0]
+            #string = line[1][0]
+            target, result = str(line[1][0]).split('=')
+            try:
+                if eval(chk[0]) == True:
+                    row[target] = result
+            except:
+                pass
+        return row
