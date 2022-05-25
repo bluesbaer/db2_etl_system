@@ -91,5 +91,5 @@ class Preformat():
         else:
             data = status.group()
         data = datetime.strptime(data, '%Y-%m-%d-%H.%M.%S')
-        pass
+        return data
 

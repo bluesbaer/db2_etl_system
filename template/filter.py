@@ -15,8 +15,8 @@ def run(data):
     # key_match = 'FIRST' 
     # data = proc.deduplicate(data, key_list, key_match)
     
-    # criteria = "row['ALTER'] >= 30 and row['ABTEILUNG'] in [1, 2, 3]"
-    criteria = "row['ALTER'] >= 30"
+    criteria = "row['ALTER'] >= 30 and row['ABTEILUNG'] in [1, 2, 3]"
+    # criteria = "row['ALTER'] >= 30"
 
     # --------------------------------------------------------------------------------------------------------------------------
     """ Executable - Please don't change """

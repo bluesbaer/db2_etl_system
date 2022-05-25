@@ -12,6 +12,7 @@ class Json():
             data = json.load(json_file)
         return data
 
+# -- TESTROUTINE -------------------------------------------------
 if __name__ == '__main__':
     driver = Json()
     data = driver.read_data('F:\\PROJEKTE\\PYTHON\\vpython\\db2_etl_system\\tools\\TEST.json')

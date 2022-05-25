@@ -16,6 +16,7 @@ class Fix():
                 row = fixfile.readline()
         return data
 
+# -- TESTROUTINE -------------------------------------------------
 if __name__ == '__main__':
     content = Fix()
     data = content.read_data('F:\\PROJEKTE\\PYTHON\\vpython\\db2_etl_system\\tools\\TEST.fix')
